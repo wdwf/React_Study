@@ -1,0 +1,9 @@
+{
+  "background_light": "#ffffff",
+  "background_dark": "#252e37",
+  "background_dark_2": "#151F27",
+  "text_light": "#ffffff",
+  "text_dark": "#313131",
+  "text_disabled": "#757575",
+  "primary": "#7756C3"
+}
