@@ -41,10 +41,10 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 
 ```bash
 # Clone este repositório pelo terminal/bash
-$ git clone https://github.com/wdwf/React_Study.git
+$ git clone https://github.com/wdwf/React_with_functions.git
 
 # Acesse a pasta do projeto
-$ cd React_Study/react_with_function
+$ cd React_with_functions
 
 # Instale as dependências
 $ npm install
