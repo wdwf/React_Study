@@ -4,15 +4,15 @@ import {
   Routes
 } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Catalog from "./pages/Contact";
+import Home from './pages/Home';
+import Cap2 from "./pages/Cap2";
 
 export function AppRoutes() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path="/catalog" element={<Catalog/>} />
+        <Route path="/capitulo2" element={<Cap2/>} />
       </Routes>
     </Router>
   )

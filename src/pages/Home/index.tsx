@@ -1,11 +1,6 @@
 import { useState } from 'react';
-
-import { SiProtocolsdotio } from 'react-icons/si';
-import { BsPencil } from 'react-icons/bs';
 import { Card } from '../../components/Card';
-
 import imageUser from '../../assets/images/user.png'
-
 import { 
   Container, Header, ImageUser,
   NameUser, Title, SectionCards,
@@ -20,7 +15,7 @@ function Home() {
   function createTask() {
 
     if(taskText.length === 0) {
-      return
+      return;
     }
     setTasks([ ...tasks, taskText ]);
     setTaskText('');
@@ -38,7 +33,7 @@ function Home() {
         </ImageUser>
         <NameUser>
           <h2>User Study</h2> 
-          <SiProtocolsdotio/>
+          😶‍🌫️
         </NameUser>
       </Header>
 
@@ -55,7 +50,7 @@ function Home() {
           className='btnSave'
           onClick={createTask}
         >
-          <BsPencil/>
+          ✏️
         </button>
       </Fields>
 
