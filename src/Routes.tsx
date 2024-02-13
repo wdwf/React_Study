@@ -7,6 +7,7 @@ import {
 import Home from './pages/Home';
 import Cap2 from "./pages/Cap2";
 import Cap3 from "./pages/Cap3";
+import Cap4 from "./pages/Cap4";
 
 export function AppRoutes() {
   return (
@@ -15,6 +16,7 @@ export function AppRoutes() {
         <Route path="/" element={<Home/>} />
         <Route path="/capitulo-2" element={<Cap2/>} />
         <Route path="/capitulo-3" element={<Cap3/>} />
+        <Route path="/capitulo-4" element={<Cap4/>} />
       </Routes>
     </Router>
   )
