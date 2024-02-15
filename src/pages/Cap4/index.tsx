@@ -95,6 +95,60 @@ export default function Cap4() {
           que uma variável de estado por campo.
         </p>
       </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Renderizar e confirmar</h4>
+        <p>
+          Antes que seus componentes sejam exibidos na tela, eles devem ser
+          renderizados pelo React. Compreender as etapas desse processo o
+          ajudará a pensar sobre como seu código é executado e a explicar seu
+          comportamento.
+        </p>
+        <p>
+          Imagine que seus componentes são cozinheiros na cozinha, montando
+          pratos saborosos a partir de ingredientes. Nesse cenário, React é o
+          garçom que faz os pedidos dos clientes e traz seus pedidos. Este
+          processo de solicitação e entrega da UI tem três etapas:
+        </p>
+        <ul>
+          <li>
+            Acionando uma renderização (entrega do pedido do convidado na
+            cozinha)
+          </li>
+          <li>Renderizando o componente (preparando o pedido na cozinha)</li>
+          <li>Comprometendo-se com o DOM (colocando o pedido na mesa)</li>
+        </ul>
+        <h5>Etapa1. Acionar uma renderização</h5>
+        <p>Existem 2 motivos para a renderização de um componente acontecer:</p>
+        <p>
+          - Renderização inicial: Feito pelo uso do nó <code>createRoot</code>
+        </p>
+        <p>- o estado do componente foi atualizado</p>
+
+        <h5>Etapa2. Renderizando seus componentes</h5>
+        <p>
+          Depois de acionar uma renderização, o React chama seus componentes
+          para descobrir o que exibir na tela. “Renderizar” é o React chamando
+          seus componentes.
+        </p>
+
+        <p>
+          Este processo é recursivo: se o componente atualizado retornar algum
+          outro componente, o React irá renderizar esse componente em seguida, e
+          se esse componente também retornar algo, ele irá renderizar esse
+          componente em seguida, e assim por diante. O processo continuará até
+          que não haja mais componentes aninhados e o React saiba exatamente o
+          que deve ser exibido na tela.
+        </p>
+
+        <h5>Etapa3. React confirma alterações no DOM</h5>
+        <p>
+          Após renderizar (chamar) seus componentes, o React modificará o DOM,
+          com <code>appendChild</code> e para novas renderizações, aplicará
+          operaçoes minimas necessarias, ou seja o React não toca no DOM se o
+          resultado da renderização for o mesmo da última vez.
+        </p>
+      </div>
     </div>
   );
 }
