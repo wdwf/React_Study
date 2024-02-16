@@ -149,6 +149,29 @@ export default function Cap4() {
           resultado da renderização for o mesmo da última vez.
         </p>
       </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>estado como um instantâneo</h4>
+        <p>
+          “Renderização” significa que o React está chamando seu componente, que
+          é uma função. O JSX que você retorna dessa função é como um
+          instantâneo da UI no tempo. Seus adereços, manipuladores de eventos e
+          variáveis locais foram todos calculados usando seu estado no momento
+          da renderização. Ao contrário de uma fotografia ou de um quadro de
+          filme, o “instantâneo” da IU que você retorna é interativo.{" "}
+        </p>
+        <p>Então segue a order de:</p>
+        <p>- Chama a função, dizendo ao react para atualizar o estado</p>
+        <p>
+          - Retorna um novo instantâneo JSX (é como se pegasse a foto do
+          componente e gerasse um jsx para conseguir interagir)
+        </p>
+        <p>
+          - Atualiza a tela para corresponder ao instantâneo que a função
+          retornou (faz uma comparação pra ver se algo foi alterado e se foi
+          substitui o DOM)
+        </p>
+      </div>
     </div>
   );
 }
