@@ -172,6 +172,57 @@ export default function Cap4() {
           substitui o DOM)
         </p>
       </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Enfileirando uma serie de atualizações de estado</h4>
+        <p>
+          Definir uma variável de estado colocará outra renderização na fila.
+          Mas às vezes você pode querer realizar várias operações no valor antes
+          de enfileirar a próxima renderização. Para fazer isso, é útil entender
+          como o estado dos lotes do React é atualizado.
+        </p>
+        <h6>Atualizações de estado dos lotes React</h6>
+        <p>
+          O React espera até que todo o código nos manipuladores de eventos seja
+          executado antes de processar suas atualizações de estado. É por isso
+          que a nova renderização só acontece depois de todas as chamadas de
+          setSomething()
+        </p>
+        <p>
+          Isso pode lembrá-lo de um garçom anotando um pedido no restaurante. Um
+          garçom não corre para a cozinha ao ouvir o seu primeiro prato! Em vez
+          disso, eles permitem que você termine seu pedido, faça alterações e
+          até mesmo receba pedidos de outras pessoas na mesa.
+        </p>
+        <p>
+          Nota: Ao executar uma serie de setSomething() o ultimo valor se
+          manterá como valido.
+        </p>
+        <p>
+          Isso permite atualizar diversas variáveis de estado, mesmo de vários
+          componentes, sem acionar muitas novas renderizações. Mas isso também
+          significa que a interface do usuário não será atualizada até que o
+          manipulador de eventos e qualquer código nele contido sejam
+          concluídos.
+        </p>
+        <h6>Função de atualização</h6>
+        <p>
+          Se for passado para o set uma função de atualização o mesmo sera posto
+          em uma fila para ser processada apos todos os outros códigos no
+          manipulador de eventos. E durante a proxima renderização, o react
+          passa por essa fila e fornece o estado final atualizado
+        </p>
+        <p>
+          ex:
+          <br />
+          {`setNumber(n => n + 1); -> Atualização na fila com n valendo 0 e retorna 1
+
+        setNumber(n => n + 1); -> Atualização na fila com n valendo 1 e retorna 2
+
+        setNumber(n => n + 1); -> Atualização na fila com n valendo 2 e retorna 3`}
+          <br />
+        </p>
+      </div>
     </div>
   );
 }
