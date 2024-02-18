@@ -223,6 +223,22 @@ export default function Cap4() {
           <br />
         </p>
       </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Atualizando objetos no estado</h4>
+        <p>
+        O estado pode conter qualquer tipo de valor JavaScript, incluindo objetos. Mas você não deve alterar diretamente os objetos que mantém no estado React. Em vez disso, quando quiser atualizar um objeto, você precisará criar um novo (ou fazer uma cópia de um existente) e, em seguida, definir o estado para usar essa cópia.
+        </p>
+
+        <p>
+        Tecnicamente, é possível alterar o conteúdo do próprio objeto . Isso é chamado de mutação:
+        {'const [position, setPosition] = useState({ x: 0, y: 0 });'}
+        <br />
+        position.x = 5
+        <br />
+        No entanto, embora os objetos no estado React sejam tecnicamente mutáveis, você deve tratá-los como se fossem imutáveis ​​— como números, booleanos e strings. Em vez de transformá-los, você deve sempre substituí-los.
+        </p>
+      </div>
     </div>
   );
 }
