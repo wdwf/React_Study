@@ -238,6 +238,20 @@ export default function Cap4() {
         <br />
         No entanto, embora os objetos no estado React sejam tecnicamente mutáveis, você deve tratá-los como se fossem imutáveis ​​— como números, booleanos e strings. Em vez de transformá-los, você deve sempre substituí-los.
         </p>
+        <h6>Copiando com sintaxe spread</h6>
+        <p>
+          Para alterar um valor de um objeto sem perder os demais valores é necessário ter uma copia dos dados existentes. Você pode usar a sintaxe ... de propagação de objeto para não precisar copiar todas as propriedades separadamente.
+          <br/>
+          <code>
+            {`setPerson({
+              ...person,
+              firstname: e.target.value
+            })`}
+          </code>
+          <br />
+          Deste modo permanecemos com todos os outros valores e alteramos apenas o que desejamos.
+        </p>
+        <p>Observe que a ...sintaxe de propagação é “superficial” - ela copia apenas coisas com um nível de profundidade. Isso torna tudo mais rápido, mas também significa que se você quiser atualizar uma propriedade aninhada, terá que usá-la mais de uma vez.</p>
       </div>
     </div>
   );
