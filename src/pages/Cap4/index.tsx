@@ -327,6 +327,64 @@ export default function Cap4() {
           `}
         </p>
       </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Atualizando matrizes no estado</h4>
+        <p>
+          Arrays são mutáveis em JavaScript, mas você deve tratá-los como
+          imutáveis ao armazená-los no estado. Assim como acontece com os
+          objetos, quando você deseja atualizar um array armazenado no estado,
+          você precisa criar um novo (ou fazer uma cópia de um existente) e
+          então definir o estado para usar o novo array.
+        </p>
+        <br />
+        <h6>Atualizando matrizes</h6>
+        <p>
+          você deve tratar os arrays no estado React como somente leitura. Isso
+          significa que você não deve reatribuir itens dentro de um array como
+          arr[0] = 'bird'e também não deve usar métodos que alterem o array,
+          como push()e pop(). Em vez disso, prefira usar métodos que retornem um
+          novo array como spread ..., map, filter, slice, ou copiar o array
+          primeiro.
+        </p>
+
+        <h6>Removendo de um array</h6>
+        <p>
+          A maneira mais fácil de remover um item de um array é filtrá -lo . Em
+          outras palavras, você produzirá um novo array que não conterá esse
+          item. Para fazer isso, use o filter método.
+        </p>
+        <p>
+          Exemplo{" "}
+          {`setArtists(
+            artists.filter(a => a.id !== artist.id)
+          );`}
+        </p>
+
+        <br />
+        <h6>Transformando uma matriz</h6>
+        <p>
+          Se quiser alterar alguns ou todos os itens do array, você pode usar
+          map()para criar um novo array.
+          <br />
+          {`
+           const nextShapes = shapes.map(shape => {
+            if (shape.type === 'square') {
+              // No change
+              return shape;
+            } else {
+              // Return a new circle 50px below
+              return {
+                ...shape,
+                y: shape.y + 50,
+              };
+            }
+          });
+          // Re-render with the new array
+          setShapes(nextShapes);
+          `}
+        </p>
+      </div>
     </div>
   );
 }
