@@ -227,21 +227,32 @@ export default function Cap4() {
       <div style={{ marginBottom: "50px" }}>
         <h4>Atualizando objetos no estado</h4>
         <p>
-        O estado pode conter qualquer tipo de valor JavaScript, incluindo objetos. Mas você não deve alterar diretamente os objetos que mantém no estado React. Em vez disso, quando quiser atualizar um objeto, você precisará criar um novo (ou fazer uma cópia de um existente) e, em seguida, definir o estado para usar essa cópia.
+          O estado pode conter qualquer tipo de valor JavaScript, incluindo
+          objetos. Mas você não deve alterar diretamente os objetos que mantém
+          no estado React. Em vez disso, quando quiser atualizar um objeto, você
+          precisará criar um novo (ou fazer uma cópia de um existente) e, em
+          seguida, definir o estado para usar essa cópia.
         </p>
 
         <p>
-        Tecnicamente, é possível alterar o conteúdo do próprio objeto . Isso é chamado de mutação:
-        {'const [position, setPosition] = useState({ x: 0, y: 0 });'}
-        <br />
-        position.x = 5
-        <br />
-        No entanto, embora os objetos no estado React sejam tecnicamente mutáveis, você deve tratá-los como se fossem imutáveis ​​— como números, booleanos e strings. Em vez de transformá-los, você deve sempre substituí-los.
+          Tecnicamente, é possível alterar o conteúdo do próprio objeto. Isso é
+          chamado de mutação:
+          {"const [position, setPosition] = useState({ x: 0, y: 0 });"}
+          <br />
+          position.x = 5
+          <br />
+          No entanto, embora os objetos no estado React sejam tecnicamente
+          mutáveis, você deve tratá-los como se fossem imutáveis ​​— como
+          números, booleanos e strings. Em vez de transformá-los, você deve
+          sempre substituí-los.
         </p>
         <h6>Copiando com sintaxe spread</h6>
         <p>
-          Para alterar um valor de um objeto sem perder os demais valores é necessário ter uma copia dos dados existentes. Você pode usar a sintaxe ... de propagação de objeto para não precisar copiar todas as propriedades separadamente.
-          <br/>
+          Para alterar um valor de um objeto sem perder os demais valores é
+          necessário ter uma copia dos dados existentes. Você pode usar a
+          sintaxe ...(spread) de propagação de objeto para não precisar copiar
+          todas as propriedades separadamente.
+          <br />
           <code>
             {`setPerson({
               ...person,
@@ -249,9 +260,72 @@ export default function Cap4() {
             })`}
           </code>
           <br />
-          Deste modo permanecemos com todos os outros valores e alteramos apenas o que desejamos.
+          Deste modo permanecemos com todos os outros valores e alteramos apenas
+          o que desejamos.
         </p>
-        <p>Observe que a ...sintaxe de propagação é “superficial” - ela copia apenas coisas com um nível de profundidade. Isso torna tudo mais rápido, mas também significa que se você quiser atualizar uma propriedade aninhada, terá que usá-la mais de uma vez.</p>
+        <p>
+          Observe que a ...sintaxe de propagação é “superficial” - ela copia
+          apenas coisas com um nível de profundidade. Isso torna tudo mais
+          rápido, mas também significa que se você quiser atualizar uma
+          propriedade aninhada, terá que usá-la mais de uma vez.
+        </p>
+        <p>
+          🚧Nota: Podemos ter uma função dinâmica que atualiza mais de um campo
+          de input:
+          <br />
+          {`function handleChange(e) {
+            setPerson({
+              ...person,
+              [e.target.name]: e.target.value
+            })
+          }
+          
+          <input name="name" value={person.name} onChange={handleChange} />
+          `}
+        </p>
+
+        <h6>Atualizando objetos aninhados</h6>
+        <p>
+          Considere uma estrutura aninhada como essa:
+          <br></br>
+          {`
+          const [person, setPerson] = useState({
+            name: 'Niki de Saint Phalle',
+            artwork: {
+              title: 'Blue Nana',
+              city: 'Hamburg',
+              image: 'https://i.imgur.com/Sd1AgUOm.jpg',
+            }
+          });
+          `}
+          <br />
+          como no React você deve tratar o estado como imutável Para alterar
+          city, primeiro você precisaria produzir o novo artwork objeto
+          (pré-preenchido com dados do anterior) e, em seguida, produzir o novo
+          person objeto que aponta para o novo artwork:
+          <br />
+          {`
+          //Cria uma copia do artwork alterando a propriedade city
+          const nextArtwork = { ...person.artwork, city: 'New Delhi' };
+
+          //Cria uma copia do person alterando artwork pela variavel criada logo a cima
+          const nextPerson = { ...person, artwork: nextArtwork };
+
+          //Seta esse novo valor
+          setPerson(nextPerson);`}
+          <br />
+          Ou, escrito como uma única chamada de função:
+          <br />
+          {`
+          setPerson({
+            ...person, // Copy other fields
+            artwork: { // but replace the artwork
+              ...person.artwork, // with the same one
+              city: 'New Delhi' // but in New Delhi!
+            }
+          });
+          `}
+        </p>
       </div>
     </div>
   );
