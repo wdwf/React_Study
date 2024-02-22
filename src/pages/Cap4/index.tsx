@@ -7,6 +7,7 @@ import AddTasks from "./components/exercise2/AddTasks";
 import ListTask from "./components/exercise2/ListTask";
 
 //exe2
+let nextId = 3;
 const initialTodos = [
   { id: 0, title: "Buy milk", done: true },
   { id: 1, title: "Eat tacos", done: false },
@@ -23,22 +24,14 @@ export default function Cap4() {
   const [todos, setTodos] = useState(initialTodos);
 
   function handleAddTask(value: string) {
-    const nextList = [
-      ...todos,
-      { id: todos.length, title: value, done: false },
-    ];
-    setTodos(nextList);
+    setTodos([...todos, { id: nextId++, title: value, done: false }]);
     console.log(todos);
   }
   function handleEditTask(nextTodo: todoProps) {
     setTodos(
       todos.map((item) => {
         if (item.id === nextTodo.id) {
-          return {
-            ...item,
-            title: nextTodo.title,
-            done: nextTodo.done,
-          };
+          return nextTodo;
         } else {
           return item;
         }
@@ -46,13 +39,7 @@ export default function Cap4() {
     );
   }
   function handleRemoveTask(removeTodoId: number) {
-    setTodos(
-      todos.filter((item) => {
-        if (item.id !== removeTodoId) {
-          return item;
-        }
-      })
-    );
+    setTodos(todos.filter((item) => item.id !== removeTodoId));
   }
 
   function onPlayMessage() {
