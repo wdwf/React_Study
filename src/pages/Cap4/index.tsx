@@ -1,9 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import CompButton from "./components/CompButton";
 import CompButtonParams from "./components/CompButtonParams";
 import CompState from "./components/CompState";
+import ListItens from "./components/exercise1/ListItens";
+import AddTasks from "./components/exercise2/AddTasks";
+import ListTask from "./components/exercise2/ListTask";
+
+//exe2
+const initialTodos = [
+  { id: 0, title: "Buy milk", done: true },
+  { id: 1, title: "Eat tacos", done: false },
+  { id: 2, title: "Brew tea", done: false },
+];
+
+export type todoProps = {
+  id: number;
+  title: string;
+  done: boolean;
+};
 
 export default function Cap4() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  function handleAddTask(value: string) {
+    const nextList = [
+      ...todos,
+      { id: todos.length, title: value, done: false },
+    ];
+    setTodos(nextList);
+    console.log(todos);
+  }
+  function handleEditTask(nextTodo: todoProps) {
+    setTodos(
+      todos.map((item) => {
+        if (item.id === nextTodo.id) {
+          return {
+            ...item,
+            title: nextTodo.title,
+            done: nextTodo.done,
+          };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+  function handleRemoveTask(removeTodoId: number) {
+    setTodos(
+      todos.filter((item) => {
+        if (item.id !== removeTodoId) {
+          return item;
+        }
+      })
+    );
+  }
+
   function onPlayMessage() {
     prompt("Hello how are you?", "...");
   }
@@ -32,6 +83,8 @@ export default function Cap4() {
         <CompButton onClick={onPlayMessage}>Play me!</CompButton>
         <CompButtonParams onFunc={onPlayMessage2} />
       </div>
+
+      {/* -------------------------------------------------- */}
 
       <div style={{ marginBottom: "50px" }}>
         <h4>Estado: Memoria de um componente</h4>
@@ -96,6 +149,8 @@ export default function Cap4() {
         </p>
       </div>
 
+      {/* -------------------------------------------------- */}
+
       <div style={{ marginBottom: "50px" }}>
         <h4>Renderizar e confirmar</h4>
         <p>
@@ -150,6 +205,8 @@ export default function Cap4() {
         </p>
       </div>
 
+      {/* -------------------------------------------------- */}
+
       <div style={{ marginBottom: "50px" }}>
         <h4>estado como um instantâneo</h4>
         <p>
@@ -172,6 +229,8 @@ export default function Cap4() {
           substitui o DOM)
         </p>
       </div>
+
+      {/* -------------------------------------------------- */}
 
       <div style={{ marginBottom: "50px" }}>
         <h4>Enfileirando uma serie de atualizações de estado</h4>
@@ -223,6 +282,8 @@ export default function Cap4() {
           <br />
         </p>
       </div>
+
+      {/* ---------------------------------------- */}
 
       <div style={{ marginBottom: "50px" }}>
         <h4>Atualizando objetos no estado</h4>
@@ -328,6 +389,8 @@ export default function Cap4() {
         </p>
       </div>
 
+      {/* ---------------------------------------- */}
+
       <div style={{ marginBottom: "50px" }}>
         <h4>Atualizando matrizes no estado</h4>
         <p>
@@ -384,6 +447,88 @@ export default function Cap4() {
           setShapes(nextShapes);
           `}
         </p>
+        <br />
+        <h6>Substituindo itens em um array</h6>
+        <p>
+          Para substituir um item, crie um novo array com map. Dentro da sua map
+          chamada, você receberá o índice do item como segundo argumento. Use-o
+          para decidir se deseja retornar o item original (o primeiro argumento)
+          ou outra coisa:
+        </p>
+        <p>{`
+        function handleIncrementClick(index) {
+          const nextCounters = counters.map((c, i) => {
+            if (i === index) {
+              // Increment the clicked counter
+              return c + 1;
+            } else {
+              // The rest haven't changed
+              return c;
+            }
+          });
+          setCounters(nextCounters);
+        }
+        `}</p>
+        <br />
+        <h6>Inserir em um array</h6>
+        <p>
+          Às vezes, você pode querer inserir um item em uma posição específica
+          que não está nem no início nem no final. Para fazer isso, você pode
+          usar a ... junto com o slice(). Então usando o spread e slice se corta
+          uma parte dos dados, então se adiciona o elemento na posição requirida
+          e com o spread e slice novamente adiciona o que foi cortado em um
+          unico elemento.
+        </p>
+
+        <p>{`
+        const nextArtists = [
+          // Items before the insertion point:
+          ...artists.slice(0, insertAt), //Corta
+          // New item:
+          { id: nextId++, name: name }, //Adiciona
+          // Items after the insertion point:
+          ...artists.slice(insertAt) // Junta tudo (insertAt seria a posição desejada por exemplo 1 seguindo a ideia do lenght)
+        ];
+        setArtists(nextArtists)
+        `}</p>
+
+        <br />
+        <h6>Fazendo alterações</h6>
+        <p>
+          Nada impede de utilizar reverse e sort para caso queira reverter ou
+          classifica uma matriz mas para fazer isso é necessário copiar o array
+          primeiro e fazer a alteração nessa copia.
+        </p>
+        <p>{`
+          const nextList = [...list];
+          nextList.reverse();
+          setList(nextList)
+        `}</p>
+      </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Exercício</h4>
+        <p>
+          Criar uma lista que tenha itens, e cada item tem dois botoes uma para
+          remover e outro para adicionar mais um na contagem se o item chegar a
+          0 ele deve ser removido. (O numero 0 não deve aparecer para o usuário)
+        </p>
+        <ListItens />
+      </div>
+
+      <div style={{ marginBottom: "50px" }}>
+        <h4>Exercício</h4>
+        <p>
+          Criar uma lista que seja possível adicionar tarefas e que seja
+          possível editar a tarefa e excluir a mesma, ao clicar em editar o
+          botão deve ser alterado para salvar.
+        </p>
+        <AddTasks handleAddTodo={handleAddTask} />
+        <ListTask
+          list={todos}
+          handleEditTodo={handleEditTask}
+          handleRemoveTodo={handleRemoveTask}
+        />
       </div>
     </div>
   );
