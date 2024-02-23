@@ -261,11 +261,13 @@ export default function Cap4() {
         <p>
           ex:
           <br />
-          {`setNumber(n => n + 1); -> Atualização na fila com n valendo 0 e retorna 1
+          <code>
+            {`setNumber(n => n + 1); -> Atualização na fila com n valendo 0 e retorna 1
 
-        setNumber(n => n + 1); -> Atualização na fila com n valendo 1 e retorna 2
+          setNumber(n => n + 1); -> Atualização na fila com n valendo 1 e retorna 2
 
-        setNumber(n => n + 1); -> Atualização na fila com n valendo 2 e retorna 3`}
+          setNumber(n => n + 1); -> Atualização na fila com n valendo 2 e retorna 3`}
+          </code>
           <br />
         </p>
       </div>
