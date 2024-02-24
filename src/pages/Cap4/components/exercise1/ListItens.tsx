@@ -7,12 +7,12 @@ type listProps = {
   qty: number;
 };
 
-const initialList1 = [
+const initialList = [
   { id: 1, name: "ProdutoA", qty: 4 },
   { id: 2, name: "ProdutoB", qty: 2 },
   { id: 3, name: "ProdutoC", qty: 5 },
 ];
-const initialList = { id: 1, name: "ProdutoA", qty: 4 };
+const initialList1 = { id: 1, name: "ProdutoA", qty: 4 };
 
 export default function ListItens() {
   const [listItens, setListItens] = useState(initialList);
@@ -20,9 +20,12 @@ export default function ListItens() {
   function handleAddItem(itemId: number) {
     console.log(listItens);
 
+    //não fazer assim!!!
     // listItens.qty++;
     // setListItens({ ...listItens });
-    setListItens({ ...listItens, qty: listItens.qty + 1 });
+
+    //fazer assim!!!
+    // setListItens({ ...listItens, qty: listItens.qty + 1 });
 
     // setListItens((prev) => {
     //   const index = listItens.findIndex((element) => {
@@ -47,24 +50,51 @@ export default function ListItens() {
     //     }
     //   })
     // );
+    setListItens(
+      listItens.map((item) => {
+        if (item.id === itemId) {
+          return {
+            ...item,
+            qty: item.qty + 1,
+          };
+        }
+
+        return item;
+      })
+    );
   }
 
   function handleRemoveItem(itemId: number) {
-    const nextList = listItens.map((item) => {
-      if (item.id === itemId) {
-        return {
-          ...item,
-          qty: item.qty - 1,
-        };
-      } else {
-        return item;
-      }
+    // const nextList = listItens.map((item) => {
+    //   if (item.id === itemId) {
+    //     return {
+    //       ...item,
+    //       qty: item.qty - 1,
+    //     };
+    //   } else {
+    //     return item;
+    //   }
+    // });
+    // setListItens(
+    //   nextList.filter((item) => {
+    //     return item.qty > 0;
+    //   })
+    // );
+
+    // setListItens();
+
+    const newListItens = [...listItens];
+    const index = newListItens.findIndex((element) => {
+      return itemId === element.id;
     });
-    setListItens(
-      nextList.filter((item) => {
-        return item.qty > 0;
-      })
-    );
+
+    if (newListItens[index].qty === 1) {
+      newListItens.splice(index, 1);
+    } else {
+      newListItens[index].qty--;
+    }
+
+    setListItens(newListItens);
   }
 
   return (
@@ -80,7 +110,7 @@ export default function ListItens() {
         />
       ))} */}
 
-      {[listItens].map((item) => {
+      {listItens.map((item) => {
         // const item = listItens[key];
         return (
           <Item
