@@ -25,10 +25,7 @@ export default function Cap5() {
         <p>
           Na questão de uma UI declarativa para uma imperativa é que na
           imperativa, o que é dito de acontecimentos corresponde diretamente a
-          como voce implementa a interação. Ou seja voce deve escrever as
-          instruções exatas para manipular a UI, como criar novos elementos ou
-          uma interação qye exigiria cuidados para garantir que voce não
-          introduziu bugs como por exemplo esquecer de mostrar algo. O que se
+          como voce implementa a interação. Ou seja voce deve escrever as instruções exatas para manipular a UI, comandos como “desativar o botão”, “ativar o botão”, “mostrar a mensagem de sucesso”. O que se
           torna difícil de fazer em sistemas mais complexos. No react voce não
           manipula a UI diretamente. Em vez disso, voce declara o que deseja
           mostrar.
@@ -37,8 +34,29 @@ export default function Cap5() {
         <p>Seguindo uma ordem de implantação que é:</p>
         <ul style={{ listStyle: "initial" }}>
           <li>
-            <b>Identificar os diferentes estados visuais do seu componente:</b>
+            <b>Identificar os diferentes estados visuais do seu componente:</b> Normalmente observando o design do protótipo desenvolvido pelo designer de interface é possível ver essas diferenças de estado que podem ser:
+            <ul>
+              <li><b>Vazio:</b> formulário tem o botão desativado pois o campo de testo esta vazio</li>
+              <li><b>Digitação:</b> formulário tem botão ativo pois o campo de texto esta preenchido</li>
+              <li><b>Sucesso:</b> A mensagem "Enviado com sucesso" é mostrada em vez de um formulário</li>
+              <li>Entre outros...</li>
+            </ul>
+            <br />
+            É aconselhável fazer "simulações" para diferentes estado antes de adicionar logica:
+            <code>
+              {`
+              export default function Form({
+                status = 'success'
+              }) {
+                if (status === 'success') {
+                  return <h1>That's right!</h1>
+                }...
+              `}
+            </code> 
+            <br />
+            caso o componente tenha muitos estados visuais, pode ser conveniente mostra-los todos em uma pagina seguindo a ideia do exemplo acima.
           </li>
+          <li><b>Determinar o que desencadeia essas mudanças de estado</b></li>
         </ul>
       </div>
     </div>
