@@ -56,7 +56,27 @@ export default function Cap5() {
             <br />
             caso o componente tenha muitos estados visuais, pode ser conveniente mostra-los todos em uma pagina seguindo a ideia do exemplo acima.
           </li>
-          <li><b>Determinar o que desencadeia essas mudanças de estado</b></li>
+          <li><b>Determinar o que desencadeia essas mudanças de estado:</b> é possível acionar atualizações de estado em resposta a dois tipos de entradas.
+          <ul>
+            <li>
+              Entradas humanas: clique de botoes, digitação navegar em um link.
+            </li>
+            <li>Entradas do computador: Chegada de respostas, conclusão de tempos limites, carregamento de imagens.</li>
+          </ul>
+          <br />
+          Em ambos os casos, é necessário definir variáveis de estado para atualizar a UI. Como por exemplo em um formulário usaríamos os dois tipos.
+          <br />
+          Um modo de ajudar a visualizar esse fluxo seria desenhar cada estado com um circulo rotulado e cada mudança entre dois estado como uma seta.
+          <br />
+          <code>
+            {`
+            Empty => (start typing) => Typing => (Press Submit) => Submitting ...
+            `}
+          </code>
+          </li>
+          <li>
+            <b>Represente o estado na memoria com useState:</b> Assim determinado os estado e o que os desencadeia defina o que precisará armazenar mas lembre simplicidade é fundamental.  
+          </li>
         </ul>
       </div>
     </div>
