@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Cap5() {
+  const [emphasis, setEmphasis] = useState(false);
   return (
     <div>
       <h2>Gerenciando o Estado</h2>
@@ -162,6 +163,101 @@ export default function Cap5() {
               ...
               `}
             </code>
+            <div
+              style={{
+                width: "100%",
+                height: "200px",
+                background: `${!emphasis ? "#555" : "transparent"}`,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                console.log("Clicou na div externa");
+                setEmphasis(false);
+              }}
+            >
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Clicou na div interna");
+                  setEmphasis(true);
+                }}
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  background: `${emphasis ? "#f56" : "#f07400"}`,
+                }}
+              ></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Escolhendo a estrutura do estado</h3>
+        <p>
+          Estruturar bem o estado torna o componente agradável de modicar e
+          depurar. as considerações que deve ser feitas para tal são:
+        </p>
+        <ul>
+          <li>
+            <p>
+              <b>Estado relacionado ao grupo:</b> Seria se voce utiliza duas
+              variáveis de estado ao mesmo tempo, considere mescla-las em uma
+              unica variável
+            </p>
+            <code>
+              {`
+                const [x, setX] = useState(0);
+                const [y, setY] = useState(0);
+                or
+                const [position, setPosition] = useState({ x: 0, y: 0 });
+              `}
+              <p>
+                Tecnicamente, você pode usar qualquer uma dessas abordagens. Mas
+                se duas variáveis de estado sempre mudam juntas, pode ser uma
+                boa ideia unificá-las em uma única variável de estado.{" "}
+              </p>
+            </code>
+          </li>
+          <li>
+            <p></p>
+            <b>Evite contradições de estado:</b> evitar situações onde estados
+            diferentes não podem estar com o mesmo valor no momento. pois se
+            ambos atualizarem o estado ao mesmo tempo podem ocorrer bugs.
+            <code>
+              {`
+                  Error:
+                  setIsSending(true);
+                  await sendMessage(text);
+                  //setIsSending(false);
+                  setIsSent(true);
+
+                  Success:
+                  setStatus('sending');
+                  await sendMessage(text);
+                  setStatus('sent');
+              `}
+            </code>
+          </li>
+          <li>
+            <p></p>
+            <b>evitar estado redundante:</b> é uma boa prática calcular
+            informações derivadas dinamicamente durante a renderização em vez de
+            armazená-las no estado do componente.{" "}
+            <code>
+              {`
+               const [firstName, setFirstName] = useState('');
+               const [lastName, setLastName] = useState('');
+               const [fullName, setFullName] = useState(''); -> Redundante (firstName + lastName da no mesmo)             
+              `}
+            </code>
+          </li>
+          <li>
+            <b>Evite estados profundamente aninhados</b>: O estado profundamente
+            hierárquico não é muito conveniente para atualizar. Quando possível,
+            prefira estruturar o estado de forma plana.
           </li>
         </ul>
       </div>
