@@ -198,7 +198,7 @@ export default function Cap5() {
         <h3>Escolhendo a estrutura do estado</h3>
         <p>
           Estruturar bem o estado torna o componente agradável de modicar e
-          depurar. as considerações que deve ser feitas para tal são:
+          depurar. As considerações que deve ser feitas para tal são:
         </p>
         <ul>
           <li>
@@ -213,6 +213,8 @@ export default function Cap5() {
                 const [y, setY] = useState(0);
                 or
                 const [position, setPosition] = useState({ x: 0, y: 0 });
+                --
+                setPosition({ ...position, x: 100 })
               `}
               <p>
                 Tecnicamente, você pode usar qualquer uma dessas abordagens. Mas
@@ -242,15 +244,54 @@ export default function Cap5() {
             </code>
           </li>
           <li>
-            <p></p>
-            <b>evitar estado redundante:</b> é uma boa prática calcular
-            informações derivadas dinamicamente durante a renderização em vez de
-            armazená-las no estado do componente.{" "}
+            <b>Evite passar propriedades para estados:</b> Ao fazer isso pode
+            ocorrer de o estado não atualizar.
+            <br />
+            <code>
+              {`
+            //error
+            function Message({ messageColor }) {
+              const [color, setColor] = useState(messageColor);
+            
+            //success
+            function Message({ messageColor }) {
+              const color = messageColor;
+            `}
+            </code>
+          </li>
+          <li>
+            <p>
+              <b>evitar estado redundante:</b> é uma boa prática calcular
+              informações derivadas dinamicamente durante a renderização em vez
+              de armazená-las no estado do componente.{" "}
+            </p>
             <code>
               {`
                const [firstName, setFirstName] = useState('');
                const [lastName, setLastName] = useState('');
                const [fullName, setFullName] = useState(''); -> Redundante (firstName + lastName da no mesmo)             
+              `}
+            </code>
+          </li>
+          <li>
+            <b>Evite estados duplicados</b>: A ideia é evitar ter parte ou o
+            item que ja existe em outro estado.
+            <br />
+            <code>
+              {`
+                //error
+                const [items, setItems] = useState(initialItems);
+                const [selectedItem, setSelectedItem] = useState(
+                  items[0]
+                );
+
+                //success
+                const [items, setItems] = useState(initialItems);
+                const [selectedId, setSelectedId] = useState(0);
+
+                const selectedItem = items.find(item =>
+                  item.id === selectedId
+                );
               `}
             </code>
           </li>
