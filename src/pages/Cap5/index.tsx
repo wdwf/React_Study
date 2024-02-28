@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Accordion from "./Accordion";
 
 export default function Cap5() {
   const [emphasis, setEmphasis] = useState(false);
@@ -301,6 +302,26 @@ export default function Cap5() {
             prefira estruturar o estado de forma plana.
           </li>
         </ul>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>
+          Compartilhando estado entre componentes - Levantamento de estado
+        </h3>
+        <p>
+          Às vezes, você deseja que o estado de dois componentes sempre mude
+          juntos. Para fazer isso, remova o estado de ambos, mova-o para o pai
+          comum mais próximo e, em seguida, passe-o para eles por meio de
+          adereços.
+        </p>
+        <Accordion />
+        <p>
+          No geral, elevamos o estado para o componente pai, e definimos
+          explicitamente que o componente filho pode alterar o estado passando
+          atraves das propriedades do componente. Por fim, passe os
+          manipuladores de eventos para que os filhos possam alterar o estado
+          dos pais.
+        </p>
       </div>
     </div>
   );
