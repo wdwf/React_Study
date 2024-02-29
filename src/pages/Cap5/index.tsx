@@ -318,10 +318,70 @@ export default function Cap5() {
         <p>
           No geral, elevamos o estado para o componente pai, e definimos
           explicitamente que o componente filho pode alterar o estado passando
-          atraves das propriedades do componente. Por fim, passe os
+          através das propriedades do componente. Por fim, passe os
           manipuladores de eventos para que os filhos possam alterar o estado
           dos pais.
         </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Preservando e redefinindo o estado</h3>
+        <p>
+          O React preserva o estado de um componente enquanto ele estiver sendo
+          renderizado em sua posição na árvore da UI. Se for removido ou se um
+          componente diferente for renderizado na mesma posição, o React
+          descartará seu estado. Porem se o mesmo componente for renderizado na
+          mesma posição o estado é preservado.
+        </p>
+        <code>
+          {`
+           const [isFancy, setIsFancy] = useState(false);
+           return (
+             <div>
+               {isFancy ? (
+                 <Counter isFancy={true} /> 
+               ) : (
+                 <Counter isFancy={false} /> 
+               )}
+               <label>
+                 <input
+                   type="checkbox"
+                   checked={isFancy}
+                   onChange={e => {
+                     setIsFancy(e.target.checked)
+                   }}
+                 />
+                 Use fancy styling
+               </label>
+             </div>
+          `}
+        </code>
+        <p>
+          Como regra geral, se você quiser preservar o estado entre as novas
+          renderizações, a estrutura da sua árvore precisa “corresponder” de uma
+          renderização para outra. Se a estrutura for diferente, o estado será
+          destruído porque o React destrói o estado quando remove um componente
+          da árvore.
+        </p>
+        <p>
+          A questão de redefinir o valor fica com a execução da destruição de um
+          componente e renderização de outro no lugar é possível fazer de 2
+          modos:
+        </p>
+        <code>
+          {`
+          //Modo 1
+          {isPlayerA &&
+            <Counter person="Taylor" />
+          }
+          {!isPlayerA &&
+            <Counter person="Taylor" />
+          }
+
+          //Modo 2 - uso da key
+          <Chat key={to.id} contact={to} />
+          `}
+        </code>
       </div>
     </div>
   );
