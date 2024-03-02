@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Accordion from "./Accordion";
+import TaskList from "./TaskList";
 
 export default function Cap5() {
   const [emphasis, setEmphasis] = useState(false);
@@ -382,6 +383,79 @@ export default function Cap5() {
           <Chat key={to.id} contact={to} />
           `}
         </code>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Extraindo logica de estado em um redutor</h3>
+        <p>
+          Componentes com muitas atualizações de estado espalhadas por muitos
+          manipuladores de eventos podem ser complicados. Para esses casos, você
+          pode consolidar toda a lógica de atualização de estado fora do seu
+          componente em uma única função, chamada redutor.
+        </p>
+        <p>
+          <b>
+            O que é uma função redutora: Os redutores são uma maneira diferente
+            de lidar com o estado. Em vez de dizer ao React “o que fazer”
+            definindo o estado, você especifica “o que o usuário acabou de
+            fazer” despachando “ações” de seus manipuladores de eventos. Você
+            pode migrar de useState para useReducer em três etapas:
+          </b>{" "}
+        </p>
+
+        <ul>
+          <li>
+            Passe do estado de configuração para ações de envio: Removendo toda
+            a logica de estado ficaremos apenas com as funções. A logica é, em
+            vez de “configurar tasks” por meio de um manipulador de eventos,
+            você está despachando uma ação “adicionou/alterou/excluiu uma
+            tarefa”. Isso é mais descritivo da intenção do usuário.
+            <br />
+            <code>
+              {`
+              function handleDeleteTask(taskId) {
+                dispatch(
+                  // "action" object:
+                  {
+                    type: 'deleted',
+                    id: taskId,
+                  }
+                );
+              }`}
+            </code>
+            <p>O objeto para o qual você passa dispatch é chamado de “ação”:</p>
+            <p>
+              Você decide o que colocar nele, mas geralmente deve conter o
+              mínimo de informações sobre o que aconteceu além de seu type.
+            </p>
+          </li>
+          <li>
+            Escreva uma função redutora: Uma função redutora é onde você
+            colocará sua lógica de estado. São necessários dois argumentos, o
+            estado atual e o objeto de ação, e retorna o próximo estado
+            <br />
+            <code>
+              {`
+              function yourReducer(state, action) {
+                // return next state for React to set
+              }
+              `}
+            </code>
+          </li>
+          <li>Use o redutor no componente: </li>
+        </ul>
+
+        <br />
+        <p>
+          <b>Quando usar tal item:</b>o uso de um redutor se você encontrar bugs
+          frequentemente devido a atualizações de estado incorretas em algum
+          componente e quiser introduzir mais estrutura ao seu código. Você não
+          precisa usar redutores para tudo: fique à vontade para misturar e
+          combinar! Você pode até mesmo usar useState no useReducer no mesmo
+          componente.
+        </p>
+
+        <TaskList />
       </div>
     </div>
   );
