@@ -10,27 +10,36 @@ type taskProps = {
   done: boolean;
 };
 
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import TaskComponent from "./TaskComponent";
+import { tasksReducer } from "./tasksReducer";
 
 export default function TaskList() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 
   function handleAdd() {
     //Todo
   }
   function handleEdit(task: taskProps) {
-    setTasks(
-      tasks.map((t) => {
-        if (t.id === task.id) {
-          return task;
-        }
-        return t;
-      })
-    );
+    dispatch({
+      type: "changed",
+      task: task,
+    });
+    // setTasks(
+    //   tasks.map((t) => {
+    //     if (t.id === task.id) {
+    //       return task;
+    //     }
+    //     return t;
+    //   })
+    // );
   }
-  function handleRemove(removeTodoId: number) {
-    setTasks(tasks.filter((item) => item.id !== removeTodoId));
+  function handleRemove(taskId: number) {
+    dispatch({
+      type: "deleted",
+      id: taskId,
+    });
+    // setTasks(tasks.filter((item) => item.id !== removeTodoId));
   }
 
   return (

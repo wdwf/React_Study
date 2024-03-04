@@ -405,11 +405,11 @@ export default function Cap5() {
 
         <ul>
           <li>
-            Passe do estado de configuração para ações de envio: Removendo toda
-            a logica de estado ficaremos apenas com as funções. A logica é, em
-            vez de “configurar tasks” por meio de um manipulador de eventos,
-            você está despachando uma ação “adicionou/alterou/excluiu uma
-            tarefa”. Isso é mais descritivo da intenção do usuário.
+            <b>Passe do estado de configuração para ações de envio:</b>{" "}
+            Removendo toda a logica de estado ficaremos apenas com as funções. A
+            logica é, em vez de “configurar tasks” por meio de um manipulador de
+            eventos, você está despachando uma ação “adicionou/alterou/excluiu
+            uma tarefa”. Isso é mais descritivo da intenção do usuário.
             <br />
             <code>
               {`
@@ -426,7 +426,8 @@ export default function Cap5() {
             <p>O objeto para o qual você passa dispatch é chamado de “ação”:</p>
             <p>
               Você decide o que colocar nele, mas geralmente deve conter o
-              mínimo de informações sobre o que aconteceu além de seu type.
+              mínimo de informações sobre o que é necessario para o
+              funcionamento da função além de seu type.
             </p>
           </li>
           <li>
@@ -438,16 +439,44 @@ export default function Cap5() {
               {`
               function yourReducer(state, action) {
                 // return next state for React to set
+                switch (action.type) {
+                  case "added": {
+                    return [
+                      ...tasks,
+                      {
+                        id: action.id,
+                        text: action.text,
+                        done: false,
+                      },
+                    ];
+                  }
+                ...
               }
               `}
             </code>
           </li>
-          <li>Use o redutor no componente: </li>
+          <li>
+            Use o redutor no componente:
+            <br />
+            <code>
+              {`
+              const [state, dispatch] = useReducer(reducer, initialArg, init?)
+              - reducer - função redutora
+              - initialArg - valor a partir do qual o estado inicial é calculado
+              - init - função inicializadora que deve retornar o estado inicial. Se não for especificado, o estado inicial será definido como initialArg.
+
+              --
+
+              - state - Representa o estado atual.
+              - dispatch - É uma função que você pode chamar para despachar uma ação e, assim, atualizar o estado.
+              `}
+            </code>
+          </li>
         </ul>
 
         <br />
         <p>
-          <b>Quando usar tal item:</b>o uso de um redutor se você encontrar bugs
+          <b>Quando usar tal item:</b> use redutor se você encontrar bugs
           frequentemente devido a atualizações de estado incorretas em algum
           componente e quiser introduzir mais estrutura ao seu código. Você não
           precisa usar redutores para tudo: fique à vontade para misturar e
@@ -456,6 +485,17 @@ export default function Cap5() {
         </p>
 
         <TaskList />
+
+        <p>
+          Embora os redutores possam “reduzir” a quantidade de código dentro do
+          seu componente, eles são, na verdade, nomeados de acordo com a
+          reduce()operação que você pode executar nos arrays. A função para a
+          qual você passa reduce é conhecida como “redutor”. Pega o resultado
+          até agora e o item atual e retorna o próximo resultado. Os redutores
+          React são um exemplo da mesma ideia: eles pegam o estado até agora e a
+          ação e retornam o próximo estado. Dessa forma, eles acumulam ações ao
+          longo do tempo em estados.
+        </p>
       </div>
     </div>
   );

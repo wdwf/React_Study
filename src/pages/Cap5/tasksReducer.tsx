@@ -4,7 +4,7 @@ type taskProps = {
   done: boolean;
 };
 
-function tasksReducer(tasks: taskProps[], action: any) {
+export function tasksReducer(tasks: taskProps[], action: any) {
   switch (action.type) {
     case "added": {
       return [
