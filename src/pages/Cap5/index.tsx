@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Accordion from "./Accordion";
 import TaskList from "./TaskList";
+import Section from "./Section";
+import Heading from "./Heading";
+import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
+import { SectionElement } from "./styles";
 
 export default function Cap5() {
   const [emphasis, setEmphasis] = useState(false);
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  console.log(theme);
+
   return (
-    <div>
+    <SectionElement className={theme}>
+      <button onClick={toggleTheme}>Change Theme</button>
       <h2>Gerenciando o Estado</h2>
       <p>
         À medida que seu aplicativo cresce, é útil ser mais intencional sobre
@@ -488,8 +497,9 @@ export default function Cap5() {
 
         <p>
           Embora os redutores possam “reduzir” a quantidade de código dentro do
-          seu componente, eles são, na verdade, nomeados de acordo com a
-          reduce()operação que você pode executar nos arrays. A função para a
+          seu componente, eles aumentam a quantidade de arquivos e podem trazer
+          uma certa complexidade, eles são, na verdade, nomeados de acordo com a
+          operação reduce() que você pode executar nos arrays. A função para a
           qual você passa reduce é conhecida como “redutor”. Pega o resultado
           até agora e o item atual e retorna o próximo resultado. Os redutores
           React são um exemplo da mesma ideia: eles pegam o estado até agora e a
@@ -497,6 +507,80 @@ export default function Cap5() {
           longo do tempo em estados.
         </p>
       </div>
-    </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Passando dados por meio de context</h3>
+        <p>
+          Normalmente, você passará informações de um componente pai para um
+          componente filho por meio de adereços. Mas passar props pode se tornar
+          detalhado e inconveniente se você tiver que passá-los por muitos
+          componentes no meio ou se muitos componentes em seu aplicativo
+          precisarem das mesmas informações. O contexto permite que o componente
+          pai disponibilize algumas informações para qualquer componente na
+          árvore abaixo dele — não importa a profundidade — sem passá-las
+          explicitamente por meio de adereços.
+        </p>
+
+        <p>
+          <b>O que é propagação de propriedades:</b>
+          Seria o ato passar propriedades de componente para componente afim de
+          alcançar na arvore de UI o elemento desejado. Passar props é uma ótima
+          maneira de canalizar dados explicitamente através de sua árvore de UI
+          para os componentes que os utilizam. Mas passar props pode se tornar
+          detalhado e inconveniente quando você precisa passar algum prop
+          profundamente pela árvore ou se muitos componentes precisarem do mesmo
+          prop.
+        </p>
+        <p>
+          <b>Como substituir a passagem repetitiva de prop por context:</b>O
+          contexto permite que um componente pai forneça dados para toda a
+          árvore abaixo dele. Existem muitos usos para o contexto. E o context
+          entra em jogo por meio de 3 etapas:
+        </p>
+        <ul>
+          <li>1. Crie um context</li>
+          <li>2. Use esse contexto do componente que precisa dos dados.</li>
+          <li>
+            3. Forneça esse contexto do componente que especifica os dados.
+          </li>
+        </ul>
+        <Section level={2}>
+          <Heading>Sub-sub-heading</Heading>
+          <Heading>Sub-sub-heading</Heading>
+          <Heading>Sub-sub-heading</Heading>
+        </Section>
+        <Section level={5}>
+          <Heading>Sub-sub-heading</Heading>
+          <Heading>Sub-sub-heading</Heading>
+          <Heading>Sub-sub-heading</Heading>
+        </Section>
+
+        <p>
+          <b>
+            Onde se aplicam context:
+            <ul>
+              <li>Tema</li>
+              <li>Conta atual</li>
+              <li>Roteamento</li>
+              <li>Gerenciando o estado</li>
+            </ul>
+          </b>
+        </p>
+        <p>
+          <b>
+            Alternativas comuns ao context:
+            <p>
+              O contexto é muito tentador de usar! No entanto, isso também
+              significa que é muito fácil usá-lo em excesso. Só porque você
+              precisa passar alguns adereços com vários níveis de profundidade,
+              não significa que você deva colocar essas informações em contexto.
+            </p>
+            <ul>
+              <li>- Passar por propriedades</li>
+            </ul>
+          </b>
+        </p>
+      </div>
+    </SectionElement>
   );
 }

@@ -1,10 +1,12 @@
-import { AppRoutes } from './Routes';
+import { AppRoutes } from "./Routes";
+import { ThemeProvider } from "./pages/Cap5/context/ThemeContext";
 
 function App() {
-
   return (
-    <AppRoutes/>
-  ) 
+    <ThemeProvider>
+      <AppRoutes />
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
