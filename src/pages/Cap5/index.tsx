@@ -1,10 +1,14 @@
 import React, { useContext, useState } from "react";
 import Accordion from "./Accordion";
-import TaskList from "./TaskList";
+import TaskList from "./reducer/TaskList";
 import Section from "./Section";
 import Heading from "./Heading";
-import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
+import { ThemeContext } from "./context/ThemeContext";
 import { SectionElement } from "./styles";
+import { TaskProvider } from "./reducerWithContext/TaskContextEx";
+import TaskAdd from "./reducerWithContext/TaskAdd";
+import TaskListEx from "./reducerWithContext/TaskListEx";
+import TaskApp from "./reducerWithContext/TaskApp";
 
 export default function Cap5() {
   const [emphasis, setEmphasis] = useState(false);
@@ -580,6 +584,25 @@ export default function Cap5() {
             </ul>
           </b>
         </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Ampliando com Redutor e contexto</h3>
+        <p>
+          Enquanto os redutores permitem consolidar a lógica de atualização de
+          estado de um componente. O contexto permite que você passe informações
+          profundamente para outros componentes. Você pode combinar redutores e
+          contexto para gerenciar o estado de uma tela complexa.
+        </p>
+        <ul>
+          <li>
+            <b>Combinando redutor e contexto</b>
+            <p></p>
+          </li>
+        </ul>
+        <TaskProvider>
+          <TaskApp />
+        </TaskProvider>
       </div>
     </SectionElement>
   );
