@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import TaskItem from "./TaskItem";
 import { taskReducerProps } from "./TaskReducerEx";
+import { useTasksDispatch } from "./TaskContextEx";
 
-export default function TaskListEx({
-  tasks,
-}: {
-  tasks: taskReducerProps[];
-  onChangeTask: () => void;
-  onDeleteTask: () => void;
-}) {
+export default function TaskListEx() {
+  const { tasks } = useTasksDispatch();
   return (
-    <div>
-      {tasks.map((task) => {
-        return <TaskItem task={task} />;
-      })}
-    </div>
+    <ul>
+      {tasks.map((task) => (
+        <li key={task.id}>
+          <TaskItem task={task} />
+        </li>
+      ))}
+    </ul>
   );
 }
 

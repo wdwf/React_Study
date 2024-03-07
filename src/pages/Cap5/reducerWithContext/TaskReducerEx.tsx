@@ -1,6 +1,7 @@
 export type taskReducerProps = {
   id: number;
   text: string;
+  done: boolean;
 };
 
 export function taskReducerEx(tasks: taskReducerProps[], action: any) {
@@ -11,6 +12,7 @@ export function taskReducerEx(tasks: taskReducerProps[], action: any) {
         {
           id: action.id,
           text: action.text,
+          done: action.done,
         },
       ];
     }

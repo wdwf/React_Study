@@ -5,7 +5,7 @@ import Section from "./Section";
 import Heading from "./Heading";
 import { ThemeContext } from "./context/ThemeContext";
 import { SectionElement } from "./styles";
-import { TaskProvider } from "./reducerWithContext/TaskContextEx";
+import { TasksDispatchContextProvider } from "./reducerWithContext/TaskContextEx";
 import TaskAdd from "./reducerWithContext/TaskAdd";
 import TaskListEx from "./reducerWithContext/TaskListEx";
 import TaskApp from "./reducerWithContext/TaskApp";
@@ -596,13 +596,35 @@ export default function Cap5() {
         </p>
         <ul>
           <li>
-            <b>Combinando redutor e contexto</b>
-            <p></p>
+            <b>Combinando redutor e contexto: </b>A logica fica em:
+            <ul>
+              <li>1. Criar um contexto,</li>
+              <li>
+                1.2. Dentro do contexto criar um provider que retorna os valores
+                e o children que sera os demais itens na arvore de UI
+              </li>
+              <li>
+                1.3. Coloque o estado e a expedição do reducer dentro do
+                provider
+              </li>
+              <li>
+                1.4. - Opcional - Usar esse contexto uma hook customizada e
+                exporte ele
+              </li>
+              <li>
+                2. Fornecer esse provider criado no contexto ao componente pai
+              </li>
+              <li>
+                3. Usar esse contexto em qualquer filho do componente pai.
+              </li>
+              <li></li>
+            </ul>
           </li>
         </ul>
-        <TaskProvider>
+
+        <TasksDispatchContextProvider>
           <TaskApp />
-        </TaskProvider>
+        </TasksDispatchContextProvider>
       </div>
     </SectionElement>
   );

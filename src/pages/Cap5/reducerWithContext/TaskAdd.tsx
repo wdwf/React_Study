@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useTasksDispatch } from "./TaskContextEx";
 
-export default function TaskAdd({
-  onAddTask,
-}: {
-  onAddTask: (text: string) => void;
-}) {
+export default function TaskAdd() {
   const [text, setText] = useState("");
+  const { handleAddTask } = useTasksDispatch();
   return (
     <div>
       <form
         onSubmit={(e) => {
-          e.defaultPrevented;
-          onAddTask(text);
+          e.preventDefault();
+          handleAddTask(text);
           setText("");
         }}
       >
