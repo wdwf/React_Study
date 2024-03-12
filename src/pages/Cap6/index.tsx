@@ -1,4 +1,4 @@
-import RefComponent from "./ref/refComponent";
+import RefComponent from "./ref/RefComponent";
 
 export default function Cap5() {
   return (
@@ -16,23 +16,50 @@ export default function Cap5() {
         <h3>Referenciando valores com referências</h3>
         <p>
           Quando você deseja que um componente “lembre” algumas informações, mas
-          não deseja que essas informações acionem novas renderizações , você
+          não deseja que essas informações acionem novas renderizações, você
           pode usar um ref .
         </p>
         <p>
-          O ref aponta para um número (no exemplo feito), mas, como state , você
-          pode apontar para qualquer coisa: uma string, um objeto ou até mesmo
-          uma função. Ao contrário do estado, ref é um objeto JavaScript simples
-          com a current propriedade que você pode ler e modificar.
+          useRef é um hook do React que fornece uma maneira de acessar e
+          interagir com um nó (elemento) do DOM ou com um objeto que persiste
+          entre renderizações, sem acionar uma nova renderização quando o valor
+          é modificado. O ref como state, pode ser apontado para qualquer coisa.
         </p>
         <p>
-          o componente não é renderizado novamente a cada incremento. Assim como
-          o estado, as referências são retidas pelo React entre as novas
-          renderizações. No entanto, definir o estado renderiza novamente um
-          componente. Mudar uma referência não!
+          Quando uma informação for usada para renderização, mantenha-a no
+          estado. Quando uma informação é necessária apenas para manipuladores
+          de eventos e sua alteração não requer uma nova renderização, usar uma
+          referência pode ser mais eficiente. O valor de useRef persiste entre
+          as renderizações do componente, mas a alteração do valor não causa uma
+          re-renderização.
+        </p>
+        <p>
+          <b>Quando usar:</b> Normalmente, você usará uma referência quando seu
+          componente precisar “sair” do React e se comunicar com APIs externas –
+          geralmente uma API de navegador que não afetará a aparência do
+          componente. Se o seu componente precisa armazenar algum valor, mas
+          isso não afeta a lógica de renderização, escolha refs. Aqui estão
+          algumas dessas situações raras:
+        </p>
+        <ul>
+          <li>Armazenando IDs de tempo limite (setInterval, setTimeout)</li>
+          <li>Armazenando e manipulando elementos DOM</li>
+          <li>
+            Armazenar outros objetos que não são necessários para calcular o
+            JSX.
+          </li>
+        </ul>
+        <p>
+          <b>Nota:</b> O useRef se assimila a duas coisas a primeira é que seu
+          uso seria como o querySeletor. e a segunda é que a definição dele
+          seria um state só que sem o metodo de definição de valor.
         </p>
 
         <RefComponent />
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Manipulando DOM com referências</h3>
       </div>
     </div>
   );
