@@ -1,3 +1,5 @@
+import ExemploKitty from "./ExemploKitty";
+import UsingFlushSync from "./UsingFlushSync";
 import RefComponent from "./ref/RefComponent";
 
 export default function Cap5() {
@@ -60,6 +62,69 @@ export default function Cap5() {
 
       <div style={{ margin: "12px 0" }}>
         <h3>Manipulando DOM com referências</h3>
+        <p>
+          s vezes você pode precisar de acesso aos elementos DOM gerenciados
+          pelo React — por exemplo, para focar um nó, rolar até ele ou medir seu
+          tamanho e posição. Não existe uma maneira integrada de fazer essas
+          coisas no React, então você precisará de uma referência para o nó DOM.
+        </p>
+        <p>
+          <b>Obtendo uma referência para o nó:</b>
+        </p>
+        <ul>
+          <li>- Importa o useRef</li>
+          <li>
+            - Declara uma referencia
+            <br />
+            <pre>const myRef = useRef(null)</pre>
+          </li>
+          <li>
+            - defina um atributo ref no elemento e atribua esse referencial
+            <br />
+            <pre>{`<div ref={myRef}>`}</pre>
+          </li>
+        </ul>
+        <p>
+          A partir desse momento o React colocará uma referência a esse nó
+          myRef.current. Você pode então acessar esse nó DOM a partir de seus
+          manipuladores de eventos e usar as APIs integradas do navegador
+        </p>
+        <pre>myRef.current.scrollIntoView();</pre>
+        <br />
+        <ExemploKitty />
+        <p>
+          Fique atento na questão de acessar referencias de outros componentes
+          pois o React não permite que um componente acesse os nós DOM de outros
+          componentes. Nem mesmo para seus próprios filhos! Isso é intencional.
+          Refs são uma saída de emergência que deve ser usada com moderação. A
+          manipulação manual dos nós DOM de outro componente torna seu código
+          ainda mais frágil.
+        </p>
+        <p>
+          os componentes que desejam expor seus nós DOM precisam aceitar esse
+          comportamento. Um componente pode especificar que “encaminha” sua
+          referência para um de seus filhos com <code>forwardRef</code>
+        </p>
+        <pre>
+          {`
+          const MyInput = forwardRef((props, ref) => {
+            return <input {...props} ref={ref} />
+          })
+          `}
+        </pre>
+        <p>
+          Para especificar claramente o que é permitido que o elemento pai possa
+          executa no elemento referenciado é possivel utilizar o
+          <b>useImperativeHandle</b> do React.
+        </p>
+        <p>
+          Caso seja necessário liberar atualizações de estado de forma síncrona
+          utilize o flushSync, que é uma função fornecida pelo React que permite
+          forçar uma sincronização imediata das atualizações do estado do
+          componente, garantindo que todas as atualizações agendadas sejam
+          processadas antes de continuar a execução do código.
+        </p>
+        <UsingFlushSync />
       </div>
     </div>
   );
