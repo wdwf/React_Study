@@ -1,8 +1,11 @@
+import { useState } from "react";
 import ExemploKitty from "./ExemploKitty";
 import UsingFlushSync from "./UsingFlushSync";
+import UsingEffect from "./effect/UsingEffect";
 import RefComponent from "./ref/RefComponent";
+import CompEffect from "./effect/CompEffect";
 
-export default function Cap5() {
+export default function Cap6() {
   return (
     <div>
       <h1>Saindo do React</h1>
@@ -125,6 +128,132 @@ export default function Cap5() {
           processadas antes de continuar a execução do código.
         </p>
         <UsingFlushSync />
+
+        <p>
+          <b>Melhores praticas: </b> Refs são uma saída de emergência. Você só
+          deve usá-los quando precisar “sair do React”. Exemplos comuns disso
+          incluem gerenciar o foco, a posição de rolagem ou chamar APIs do
+          navegador que o React não expõe.
+        </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Sincronizando com Effect</h3>
+        <p>
+          Alguns componentes precisam ser sincronizados com sistemas externos.
+          Por exemplo, você pode querer controlar um componente não React com
+          base no estado React, configurar uma conexão de servidor ou enviar um
+          log analítico quando um componente aparecer na tela. Os efeitos
+          permitem executar algum código após a renderização para que você possa
+          sincronizar seu componente com algum sistema fora do React.
+        </p>
+        <p>Há dois tipos de logica dentro do react:</p>
+        <ul>
+          <li>
+            - O código de renderização: Seria os componentes puros aqueles que
+            devem apenas executar/calcular e trazer o resultado, mas não fazer
+            mais nada.
+          </li>
+          <li>
+            Manipuladores de eventos: Seriam funções aninhadas dentro de seus
+            componentes que fazem coisas em vez de apenas calculá-las (por
+            exemplo, um clique de botão ou digitação).
+          </li>
+        </ul>
+        <p>
+          Às vezes isso não é suficiente. Considerando possíveis componentes que
+          devem se conectar com servidores externos os tornando componentes
+          impuros.
+        </p>
+        <p>
+          <b>O que são efeitos:</b> Os efeitos permitem especificar efeitos
+          colaterais causados pela própria renderização, e não por um evento
+          específico, serve como uma maneira de lidar com ações que precisam
+          ocorrer após renderizações, como busca de dados, assinatura de eventos
+          ou manipulação do DOM. (seria a ideia de poder esperar o DOM carregar
+          para assim poder fazer uma referencia com useRef)
+        </p>
+        <p>
+          <b>Como usar um efeito:</b>
+        </p>
+        <ul>
+          <li>
+            Declare um useEffect Hook: Por padrão, seu efeito será executado
+            após cada renderização se for definida a um estado para ser
+            observado do contrario só sera executado esse efeito uma unica vez.
+          </li>
+          <li>
+            Especifique as dependências do efeito: Especifique os estado as
+            serem observados.
+            <p>
+              Nota: Se as dependências não forem definidas e as [] não forem
+              passadas o useEffect sera executado em toda renderização que
+              ocorra no componente caso seja definida os [] o effect só sera
+              executado uma unica vez
+            </p>
+          </li>
+          <li>
+            Adicione limpeza, se necessário: Alguns efeitos precisam especificar
+            como parar, desfazer ou limpar o que quer que estejam fazendo. Por
+            exemplo, “conectar” precisa de “desconectar”, “assinar” precisa de
+            “cancelar inscrição” e “buscar” precisa de “cancelar” ou “ignorar”.
+          </li>
+        </ul>
+        <pre>
+          {`
+           // Efeito que atualiza o título da página após cada renderização
+           useEffect(() => {
+             document.title = 'Contagem: count';
+           });
+         
+           // Efeito que exibe uma mensagem após a montagem inicial
+           useEffect(() => {
+             console.log('O componente foi montado');
+           }, []);
+         
+           // Efeito que limpa o temporizador quando o componente é desmontado
+           useEffect(() => {
+             const timer = setInterval(() => {
+               setCount((prevCount) => prevCount + 1);
+             }, 1000);
+         
+             return () => {
+               clearInterval(timer);
+               console.log('O componente foi desmontado');
+             };
+           }, []);
+
+           // Outro exemplo de limpeza
+            useEffect(() => {
+              let ignore = false;
+            
+              async function startFetching() {
+                const json = await fetchTodos(userId);
+                if (!ignore) {
+                  setTodos(json);
+                }
+              }
+            
+              startFetching();
+            
+              return () => {
+                ignore = true;
+              };
+            }, [userId]);
+
+          //Limpeza com chat
+            export default function ChatRoom({ roomId }) {
+              useEffect(() => {
+                const connection = createConnection(roomId);
+                connection.connect();
+                return () => connection.disconnect();
+              }, [roomId]);
+            
+              return <h1>Welcome to {roomId}!</h1>;
+            }
+          `}
+        </pre>
+        <CompEffect />
       </div>
     </div>
   );
