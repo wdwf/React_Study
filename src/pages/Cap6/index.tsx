@@ -4,10 +4,12 @@ import UsingFlushSync from "./UsingFlushSync";
 import UsingEffect from "./effect/UsingEffect";
 import RefComponent from "./ref/RefComponent";
 import CompEffect from "./effect/CompEffect";
+import { Link } from "react-router-dom";
 
 export default function Cap6() {
   return (
     <div>
+      <Link to='/capitulo-5'>Cap5</Link>
       <h1>Saindo do React</h1>
       <p>
         Alguns de seus componentes podem precisar ser controlados e
@@ -197,6 +199,7 @@ export default function Cap6() {
             como parar, desfazer ou limpar o que quer que estejam fazendo. Por
             exemplo, “conectar” precisa de “desconectar”, “assinar” precisa de
             “cancelar inscrição” e “buscar” precisa de “cancelar” ou “ignorar”.
+            <p>Reacqt guarda essa função</p>
           </li>
         </ul>
         <pre>

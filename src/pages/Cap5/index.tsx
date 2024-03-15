@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Accordion from "./Accordion";
 import TaskList from "./reducer/TaskList";
 import Section from "./Section";
@@ -9,6 +9,7 @@ import { TasksDispatchContextProvider } from "./reducerWithContext/TaskContextEx
 import TaskAdd from "./reducerWithContext/TaskAdd";
 import TaskListEx from "./reducerWithContext/TaskListEx";
 import TaskApp from "./reducerWithContext/TaskApp";
+import { Link } from "react-router-dom";
 
 export default function Cap5() {
   const [emphasis, setEmphasis] = useState(false);
@@ -16,8 +17,19 @@ export default function Cap5() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   console.log(theme);
 
+  useEffect(() => {
+    let scrollEvent = function () {
+      console.log("estou dando scroll no capítulo 5");
+    };
+    document.addEventListener("scroll", scrollEvent);
+    return () => {
+      document.removeEventListener("scroll", scrollEvent);
+    };
+  }, []);
+
   return (
     <SectionElement className={theme}>
+      <Link to='/capitulo-6'>Cap6</Link>
       <button onClick={toggleTheme}>Change Theme</button>
       <h2>Gerenciando o Estado</h2>
       <p>
