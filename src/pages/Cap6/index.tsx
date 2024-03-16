@@ -258,6 +258,20 @@ export default function Cap6() {
         </pre>
         <CompEffect />
       </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Talvez voce não precise do useEffect</h3>
+        <p>
+          Os efeitos são uma saída de emergência do paradigma React. Eles
+          permitem que você “saia” do React e sincronize seus componentes com
+          algum sistema externo, como um widget não-React, rede ou o DOM do
+          navegador. Se não houver nenhum sistema externo envolvido (por
+          exemplo, se você quiser atualizar o estado de um componente quando
+          alguns adereços ou estado mudarem), você não deverá precisar de um
+          Efeito. A remoção de efeitos desnecessários tornará seu código mais
+          fácil de seguir, mais rápido de executar e menos sujeito a erros.
+        </p>
+      </div>
     </div>
   );
 }

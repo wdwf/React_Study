@@ -15,16 +15,30 @@ export default function UsingEffect({
   }
 
   useEffect(() => {
-    if (isPlaying) {
-      refPlayer.current.play();
-    } else {
-      refPlayer.current.pause();
-    }
-  }, [isPlaying]);
+    console.log("entrando...", t);
+
+    return () => {
+      console.log("saindo...", t);
+    };
+  }, [t]);
+
+  // useEffect(() => {
+  //   console.log("entrando...", isPlaying);
+
+  //   if (isPlaying) {
+  //     refPlayer.current.play();
+  //   } else {
+  //     refPlayer.current.pause();
+  //   }
+
+  //   return () => {
+  //     console.log("saindo...", isPlaying);
+  //   };
+  // }, [isPlaying]);
 
   return (
     <div>
-      <button onClick={handleAdd}>{t}</button>
+      <button onClick={handleAdd}>{t} VALOR</button>
       <video
         style={{ width: "300px" }}
         src={src}
