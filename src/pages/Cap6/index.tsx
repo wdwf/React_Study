@@ -271,6 +271,13 @@ export default function Cap6() {
           Efeito. A remoção de efeitos desnecessários tornará seu código mais
           fácil de seguir, mais rápido de executar e menos sujeito a erros.
         </p>
+        <p>
+          <b>Um caso comum que não necessita de useEffect é: </b> Para
+          transformar dados para renderização: Por exemplo, digamos que você
+          queira filtrar uma lista antes de exibi-la. No entanto, isso é
+          ineficiente. Quando você atualiza o estado, o React primeiro chama as
+          funções do componente para calcular o que deve estar na tela.
+        </p>
       </div>
     </div>
   );
