@@ -199,7 +199,6 @@ export default function Cap6() {
             como parar, desfazer ou limpar o que quer que estejam fazendo. Por
             exemplo, “conectar” precisa de “desconectar”, “assinar” precisa de
             “cancelar inscrição” e “buscar” precisa de “cancelar” ou “ignorar”.
-            <p>Reacqt guarda essa função</p>
           </li>
         </ul>
         <pre>
@@ -273,11 +272,172 @@ export default function Cap6() {
         </p>
         <p>
           <b>Um caso comum que não necessita de useEffect é: </b> Para
-          transformar dados para renderização: Por exemplo, digamos que você
-          queira filtrar uma lista antes de exibi-la. No entanto, isso é
-          ineficiente. Quando você atualiza o estado, o React primeiro chama as
-          funções do componente para calcular o que deve estar na tela.
+          transformar dados para renderização. Por exemplo, digamos que você
+          queira filtrar uma lista antes de exibi-la, poderíamos usar useEffect
+          para isso. No entanto, isso é ineficiente. Quando você atualiza o
+          estado, o React primeiro chama as funções do componente para calcular
+          o que deve estar na tela. Ou seja a atualização do componente em sim
+          ja iria ocorrer se fosse adicionado um effect uma nova renderização
+          ocorreria sem necessidade.
         </p>
+        <p>
+          Um outro exemplo seria adquirir um nome completo com base em duas
+          variáveis de estado firstname e lastname o uso de effect não teria
+          muito sentido, mas sim calcular um novo valor com base nesses dois
+          estados.
+        </p>
+        <pre>
+          {`
+          function Form() {
+            const [firstName, setFirstName] = useState('Taylor');
+            const [lastName, setLastName] = useState('Swift');
+          
+            // 🔴 Avoid: redundant state and unnecessary Effect
+            const [fullName, setFullName] = useState('');
+            useEffect(() => {
+              setFullName(firstName + ' ' + lastName);
+            }, [firstName, lastName]);
+            // ...
+          }
+
+          //Jeito certo
+
+          function Form() {
+            const [firstName, setFirstName] = useState('Taylor');
+            const [lastName, setLastName] = useState('Swift');
+            // ✅ Good: calculated during rendering
+            const fullName = firstName + ' ' + lastName;
+            // ...
+          }
+          `}
+        </pre>
+        <p>
+          {" "}
+          Armazenar informações de renderizações anteriores também pode ser um
+          caso onde effect não entre
+        </p>
+        <pre>
+          {`
+          function List({ items }) {
+            const [isReverse, setIsReverse] = useState(false);
+            const [selection, setSelection] = useState(null);
+            ❌
+            useEffect(() => {
+              setSelection(null);
+            }, [items]);
+          }
+
+          // ------
+
+          function List({ items }) {
+            const [isReverse, setIsReverse] = useState(false);
+            const [selection, setSelection] = useState(null);
+          
+            ✔
+            const [prevItems, setPrevItems] = useState(items);
+            if (items !== prevItems) {
+              setPrevItems(items);
+              setSelection(null);
+            }
+            // ...
+          }
+          `}
+        </pre>
+        <p>
+          Muitos aplicativos usam efeitos para iniciar a busca de dados. É
+          bastante comum escrever um efeito de busca de dados como este:
+        </p>
+        <pre>
+          {`
+          function SearchResults({ query }) {
+            const [results, setResults] = useState([]);
+            const [page, setPage] = useState(1);
+          
+            useEffect(() => {
+              //variável usada para corrigir a condição de corrida das solicitações
+              let ignore = false;
+              fetchResults(query, page).then(json => {
+                if (!ignore) {
+                  setResults(json);
+                }
+              });
+              return () => {
+                ignore = true;
+              };
+            }, [query, page]);
+          
+            function handleNextPageClick() {
+              setPage(page + 1);
+            }
+            // ...
+          }
+          `}
+        </pre>
+        <p>
+          Você não precisa mover essa busca para um manipulador de eventos. Isto
+          pode parecer uma contradição com os exemplos anteriores, onde você
+          precisava colocar a lógica nos manipuladores de eventos! No entanto,
+          considere que não é o evento de digitação o principal motivo da busca.
+          As entradas de pesquisa geralmente são pré-preenchidas a partir do
+          URL, e o usuário pode navegar para trás e para frente sem tocar na
+          entrada. Não importa de onde page e query venha. Embora este
+          componente esteja visível, você deseja mantê-lo results sincronizado
+          com os dados da rede para os dados atuais page e query. É por isso que
+          é um Efeito.
+        </p>
+
+        <p>
+          Em geral, sempre que você precisar recorrer à escrita de efeitos,
+          fique atento para quando você pode extrair uma parte da funcionalidade
+          em um Hook personalizado com uma API mais declarativa e desenvolvida
+          para um propósito. Quanto menos useEffect chamadas brutas você tiver
+          em seus componentes, mais fácil será manter seu aplicativo.
+        </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <p>🚧 Tema deve ser movido para outro lugar 🚧</p>
+        <h3>useMemo</h3>
+        <p>
+          O useMemo coloca em cache o resultado de uma função e o retorna. Se as
+          dependências fornecidas ao useMemo permanecerem inalteradas entre as
+          renderizações, o valor memorizado é retornado sem reavaliar a função.
+          <br />
+          Se as dependências fornecidas ao useMemo mudarem entre as
+          renderizações, a função é reavaliada e um novo valor é memoizado. Esse
+          novo valor é retornado nas renderizações subsequentes até que as
+          dependências mudem novamente.
+          <br />
+          useMemo não tornará a primeira renderização mais rápida. Isso apenas
+          ajuda você a pular trabalhos desnecessários nas atualizações.
+        </p>
+        <pre>
+          {`
+            const [value, setValue] = useState(10);
+
+            // Memoriza o resultado da função de cálculo
+            const memorizedResult = useMemo(() => {
+
+              console.log('Calculando novo valor...');
+
+              return value * 2;
+
+            }, [value]); // Reavalia quando o valor muda
+          `}
+        </pre>
+        <p>
+          <b>Quando usar:</b> Execute a interação que você está medindo. Você
+          verá os logs como filter array: 0.15ms em seu console. Se o tempo
+          total registrado totalizar um valor significativo (digamos, 1ms ou
+          mais), pode fazer sentido usar useMemo.
+        </p>
+        <pre>
+          {`
+           console.time('filter array'); 
+           const visibleTodos = getFilteredTodos(todos, filter); 
+           console.timeEnd('filter array');
+          `}
+        </pre>
       </div>
     </div>
   );
