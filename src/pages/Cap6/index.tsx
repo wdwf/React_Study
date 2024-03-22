@@ -439,6 +439,50 @@ export default function Cap6() {
           `}
         </pre>
       </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Ciclo de vida dos efeitos reativos</h3>
+        <p>
+          Os efeitos têm um ciclo de vida diferente dos componentes. Os
+          componentes podem ser montados, atualizados ou desmontados. Um Efeito
+          só pode fazer duas coisas: começar a sincronizar algo e depois parar
+          de sincronizá-lo. Este ciclo pode acontecer várias vezes se o seu
+          efeito depender de adereços e estados que mudam com o tempo. O React
+          fornece uma regra linter para verificar se você especificou as
+          dependências do seu efeito corretamente. Isso mantém seu efeito
+          sincronizado com os adereços e estados mais recentes.
+        </p>
+        <p>
+          Para ilustrar este ponto, considere este efeito conectando seu
+          componente a um servidor de chat:
+        </p>
+        <pre>
+          {`
+          const serverUrl = 'https://localhost:1234';
+
+          function ChatRoom({ roomId }) {
+            useEffect(() => {
+
+              // -> iniciar a sincronização
+
+              const connection = createConnection(serverUrl, roomId);
+              connection.connect();
+
+              // -> parar a sincronização
+              return () => {
+                connection.disconnect();
+              };
+              
+              // ...
+
+            }, [roomId]);
+            // ...
+          }
+          `}
+        </pre>
+
+        <p>A questão de poder precisar sincronizar varias vezes é que </p>
+      </div>
     </div>
   );
 }
