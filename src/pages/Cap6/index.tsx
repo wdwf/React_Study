@@ -575,6 +575,186 @@ export default function Cap6() {
 
       <div style={{ margin: "12px 0" }}>
         <h3>Removendo dependência de efeito</h3>
+        <p>
+          Remover dependências desnecessárias pode ser necessário para não
+          causar bugs o efeito não ser executado diversas vezes
+        </p>
+        <ul>
+          <li>
+            <p>
+              Um ponto a se observar nesse topico seria se o seu efeito está
+              fazendo várias coisas não relacionadas.
+            </p>
+            <br />
+            <p>
+              Imagine que você está criando um formulário de envio onde o
+              usuário precisa escolher sua cidade e região. Você busca a lista
+              do citiesservidor de acordo com os selecionados countrypara
+              mostrá-los em um menu suspenso:
+            </p>
+            <pre>
+              {`
+              function ShippingForm({ country }) {
+                const [cities, setCities] = useState(null);
+                const [city, setCity] = useState(null);
+              
+                useEffect(() => {
+                  let ignore = false;
+                  fetch('/api/cities?country=\${country}')
+                    .then(response => response.json())
+                    .then(json => {
+                      if (!ignore) {
+                        setCities(json);
+                      }
+                    });
+                  return () => {
+                    ignore = true;
+                  };
+                }, [country]); // ✅ All dependencies declared
+              
+                // ...
+              `}
+            </pre>
+            <p>
+              Agora, digamos que você esteja adicionando uma segunda caixa de
+              seleção para áreas da cidade, que deve buscar o areas arquivo
+              city. Você pode começar adicionando uma segunda fetch chamada para
+              a lista de áreas dentro do mesmo Efeito:
+            </p>
+            <pre>
+              {`
+              function ShippingForm({ country }) {
+                const [cities, setCities] = useState(null);
+                const [city, setCity] = useState(null);
+                const [areas, setAreas] = useState(null);
+              
+                useEffect(() => {
+                  let ignore = false;
+                  fetch('/api/cities?country=\${country}')
+                    .then(response => response.json())
+                    .then(json => {
+                      if (!ignore) {
+                        setCities(json);
+                      }
+                    });
+                  // 🔴 Avoid: A single Effect synchronizes two independent processes
+                  if (city) {
+                    fetch('/api/areas?city=\${city}')
+                      .then(response => response.json())
+                      .then(json => {
+                        if (!ignore) {
+                          setAreas(json);
+                        }
+                      });
+                  }
+                  return () => {
+                    ignore = true;
+                  };
+                }, [country, city]); // ✅ All dependencies declared
+              
+                // ...
+              `}
+            </pre>
+            <p>
+              No entanto, como o Efeito agora usa a city variável de estado,
+              você teve que adicioná-la city à lista de dependências. Isso, por
+              sua vez, introduziu um problema: quando o usuário seleciona uma
+              cidade diferente, o Efeito será executado novamente e chamará
+              fetchCities(country). Como resultado, você recuperará
+              desnecessariamente a lista de cidades muitas vezes.
+            </p>
+            <p>
+              Para corrigir isso divida a lógica em dois efeitos, cada um
+              reagindo ao suporte com o qual precisa ser sincronizado:
+            </p>
+            <pre>
+              {`
+              function ShippingForm({ country }) {
+                const [cities, setCities] = useState(null);
+                useEffect(() => {
+                  let ignore = false;
+                  fetch('/api/cities?country=\${country}')
+                    .then(response => response.json())
+                    .then(json => {
+                      if (!ignore) {
+                        setCities(json);
+                      }
+                    });
+                  return () => {
+                    ignore = true;
+                  };
+                }, [country]); // ✅ All dependencies declared
+              
+                const [city, setCity] = useState(null);
+                const [areas, setAreas] = useState(null);
+                useEffect(() => {
+                  if (city) {
+                    let ignore = false;
+                    fetch('/api/areas?city=\${city}')
+                      .then(response => response.json())
+                      .then(json => {
+                        if (!ignore) {
+                          setAreas(json);
+                        }
+                      });
+                    return () => {
+                      ignore = true;
+                    };
+                  }
+                }, [city]); // ✅ All dependencies declared
+              
+                // ...
+              `}
+            </pre>
+            <p>
+              Outro ponto importante é evitar usar objetos ou funçoes como
+              dependencias de efeitos, pois eles são recriados todas vez que ha
+              uma renderização no componente para contornar esse problema tente
+              movê-los para fora do componente, dentro do Efeito, ou extrair
+              valores primitivos deles.
+            </p>
+            <p>
+              Se o objeto ou função não depender de nenhum valor reativo (de
+              algum useState) mova-ó para for do componente
+            </p>
+            <pre>
+              {`
+              const options = {
+                serverUrl: 'https://localhost:1234',
+                roomId: 'music'
+              };
+              
+              function ChatRoom() {
+                const [message, setMessage] = useState('');
+              
+                useEffect(() => {
+                  const connection = createConnection(options);
+                  connection.connect();
+                  return () => connection.disconnect();
+                }, []); // ✅ All dependencies declared
+                // ...
+              `}
+            </pre>
+            <p>Agora se depender deve ser especificado dentro do efeito</p>
+            <pre>
+              {`
+              function ChatRoom({ roomId }) {
+                const [message, setMessage] = useState('');
+              
+                useEffect(() => {
+                  const options = {
+                    serverUrl: serverUrl,
+                    roomId: roomId
+                  };
+                  const connection = createConnection(options);
+                  connection.connect();
+                  return () => connection.disconnect();
+                }, [roomId]); // ✅ All dependencies declared
+                // ...
+              `}
+            </pre>
+          </li>
+        </ul>
       </div>
     </div>
   );
