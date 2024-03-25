@@ -481,7 +481,34 @@ export default function Cap6() {
           `}
         </pre>
 
-        <p>A questão de poder precisar sincronizar varias vezes é que </p>
+        <p>
+          A questão de poder precisar sincronizar varias vezes e com sincronizar
+          quer dizer se conectar a uma nova sala referindo-se ao exemplo acima,
+          é que sem essa sincronização não ocorre a mudança de sala então a
+          função de limpeza vem pra ajudar nesse caso, desconectando o user e
+          reconectando novamente a uma nva sala.
+        </p>
+        <p>
+          É observável que componente que apresentam variaveis regulares que são
+          calculadas durante a renderização podem (se fizer sentido) estarem
+          dentro dos valores observaveis do efeito.
+        </p>
+        <pre>
+          {`
+            function ChatRoom({ roomId, selectedServerUrl }) { // roomId is reactive
+              const settings = useContext(SettingsContext); // settings is reactive
+              const serverUrl = selectedServerUrl ?? settings.defaultServerUrl; // serverUrl is reactive
+              useEffect(() => {
+                const connection = createConnection(serverUrl, roomId); // Your Effect reads roomId and serverUrl
+                connection.connect();
+                return () => {
+                  connection.disconnect();
+                };
+              }, [roomId, serverUrl]); // So it needs to re-synchronize when either of them changes!
+              // ...
+            }
+          `}
+        </pre>
       </div>
     </div>
   );
