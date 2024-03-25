@@ -490,8 +490,8 @@ export default function Cap6() {
         </p>
         <p>
           É observável que componente que apresentam variaveis regulares que são
-          calculadas durante a renderização podem (se fizer sentido) estarem
-          dentro dos valores observaveis do efeito.
+          calculadas durante a renderização podem (se fizer sentido) estar
+          dentro dos valores observáveis do efeito.
         </p>
         <pre>
           {`
@@ -509,6 +509,72 @@ export default function Cap6() {
             }
           `}
         </pre>
+        <p>
+          Uma observação em questão de dependências é que Evite confiar em
+          objetos e funções como dependências.
+        </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Separando eventos de efeitos</h3>
+        <p>
+          Eventos sao acionados por triggers e efeitos são acionados por
+          dependências que eram diferentes do que eram durante a última
+          renderização. Às vezes, você também deseja uma mistura de ambos os
+          comportamentos: um Efeito que é executado novamente em resposta a
+          alguns valores, mas não a outros.
+        </p>
+        <br />
+        <p>
+          <b>Como escolher entre um evento ou um efeito:</b> se a interação for
+          ser executada em um tempo especifico por conta da ação do usuario logo
+          é um evento por exemplo clicar para enviar uma mensagem, agora se ação
+          a ocorrer for independente do usuario logo é um efeito, por exemplo
+          conectar no servidor de chat
+        </p>
+        <br />
+        <p>
+          <b>Extraindo lógica não reativa de efeitos:</b> A questão nesse ponto
+          é que se uma variavel reativa (cuja as mudanças são detectadas por
+          exemplo useState) estivesse como dependencia do efeito porem não se
+          necessitasse dessa variavel lá (o react avisa que toda variavel
+          reativa presente dentro do efeito se faz necessario dentro das
+          dependencias!!!) seria preciso encontrar uma maneira de separar essa
+          lógica não reativa do efeito reativo ao seu redor.
+        </p>
+        <p>
+          Para resolver isso podemos usar o hook <code>useEffectEvent</code>
+        </p>
+        <pre>
+          {`
+          function ChatRoom({ roomId, theme }) {
+            const onConnected = useEffectEvent(() => {
+              showNotification('Connected!', theme);
+            });
+          
+            useEffect(() => {
+              const connection = createConnection(serverUrl, roomId);
+              connection.on('connected', () => {
+                onConnected();
+              });
+              connection.connect();
+              return () => connection.disconnect();
+            }, [roomId]); // ✅ All dependencies declared
+            // ...
+          `}
+        </pre>
+        <p>
+          Você pode pensar em Effect Events como sendo muito semelhantes aos
+          manipuladores de eventos. A principal diferença é que os manipuladores
+          de eventos são executados em resposta às interações do usuário,
+          enquanto os eventos de efeito são acionados por você a partir de
+          efeitos. Os Eventos de Efeito permitem “quebrar a cadeia” entre a
+          reatividade dos Efeitos e o código que não deveria ser reativo.
+        </p>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Removendo dependência de efeito</h3>
       </div>
     </div>
   );
