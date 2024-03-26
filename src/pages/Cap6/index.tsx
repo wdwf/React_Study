@@ -577,7 +577,7 @@ export default function Cap6() {
         <h3>Removendo dependência de efeito</h3>
         <p>
           Remover dependências desnecessárias pode ser necessário para não
-          causar bugs o efeito não ser executado diversas vezes
+          causar bugs ou o efeito não ser executado diversas vezes
         </p>
         <ul>
           <li>
@@ -588,9 +588,9 @@ export default function Cap6() {
             <br />
             <p>
               Imagine que você está criando um formulário de envio onde o
-              usuário precisa escolher sua cidade e região. Você busca a lista
-              do citiesservidor de acordo com os selecionados countrypara
-              mostrá-los em um menu suspenso:
+              usuário precisa escolher sua cidade e região. Você busca na lista
+              de cities de acordo com a lista de country para mostrá-los em um
+              menu suspenso:
             </p>
             <pre>
               {`
@@ -616,10 +616,10 @@ export default function Cap6() {
               `}
             </pre>
             <p>
-              Agora, digamos que você esteja adicionando uma segunda caixa de
-              seleção para áreas da cidade, que deve buscar o areas arquivo
-              city. Você pode começar adicionando uma segunda fetch chamada para
-              a lista de áreas dentro do mesmo Efeito:
+              Agora, digamos que você adicione uma segunda caixa de seleção para
+              áreas da cidade, que deve buscar o areas arquivo city. Você pode
+              começar adicionando uma segunda chamada fetch para a lista de
+              áreas dentro do mesmo Efeito:
             </p>
             <pre>
               {`
@@ -715,7 +715,7 @@ export default function Cap6() {
             </p>
             <p>
               Se o objeto ou função não depender de nenhum valor reativo (de
-              algum useState) mova-ó para for do componente
+              algum useState) mova-ó para fora do componente
             </p>
             <pre>
               {`
@@ -755,6 +755,142 @@ export default function Cap6() {
             </pre>
           </li>
         </ul>
+      </div>
+
+      <div style={{ margin: "12px 0" }}>
+        <h3>Reutilizando logica em hooks personalizados</h3>
+        <p>
+          Às vezes, você desejará que houvesse um Gancho para algum propósito
+          mais específico: por exemplo, para buscar dados, para saber se o
+          usuário está online ou para conectar-se a uma sala de bate-papo. Você
+          pode não encontrar esses Hooks no React, mas pode criar seus próprios
+          Hooks de acordo com as necessidades do seu aplicativo.
+        </p>
+        <p>
+          <b>O que são custom hooks:</b> são uma forma de reutilizar lógica de
+          estado e efeitos em componentes funcionais no React. Eles permitem
+          extrair lógica de um componente e reutilizá-la em outros componentes
+          sem a necessidade de repetição de código. Em essência, um custom hook
+          é uma função JavaScript que utiliza hooks do React internamente. Ele
+          pode utilizar hooks básicos, como useState, useEffect, useContext,
+          entre outros, para encapsular um comportamento específico. Os custom
+          hooks seguem uma convenção de nomenclatura, começando com o prefixo
+          "use" para indicar que são hooks e permitir o compartilhamento de
+          lógica em diversos componentes.
+        </p>
+        <pre>
+          {`
+          import { useState, useEffect } from 'react';
+
+          function useFetch(url) {
+            const [data, setData] = useState(null);
+            const [loading, setLoading] = useState(true);
+          
+            useEffect(() => {
+              const fetchData = async () => {
+                try {
+                  const response = await fetch(url);
+                  const jsonData = await response.json();
+                  setData(jsonData);
+                  setLoading(false);
+                } catch (error) {
+                  console.error('Erro ao buscar dados:', error);
+                  setLoading(false);
+                }
+              };
+          
+              fetchData();
+          
+              // Cleanup function
+              return () => {
+                // Executado ao desmontar o componente ou ao atualizar a URL
+                setData(null);
+                setLoading(true);
+              };
+            }, [url]);
+          
+            return { data, loading };
+          }
+          
+          export default useFetch;
+          `}
+        </pre>
+        <p>
+          Ao extrair lógica em Hooks personalizados, você pode ocultar os
+          detalhes complicados de como você lida com algum sistema externo ou
+          uma API do navegador. O código dos seus componentes expressa sua
+          intenção, não a implementação.
+        </p>
+        <pre>
+          {`
+          function useOnlineStatus() {
+            const [isOnline, setIsOnline] = useState(true);
+            useEffect(() => {
+              function handleOnline() {
+                setIsOnline(true);
+              }
+              function handleOffline() {
+                setIsOnline(false);
+              }
+              window.addEventListener('online', handleOnline);
+              window.addEventListener('offline', handleOffline);
+              return () => {
+                window.removeEventListener('online', handleOnline);
+                window.removeEventListener('offline', handleOffline);
+              };
+            }, []);
+            return isOnline;
+          }
+
+          //Outro componente
+          import { useOnlineStatus } from './useOnlineStatus.js';
+
+          function StatusBar() {
+            const isOnline = useOnlineStatus();
+            return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+          }
+          `}
+        </pre>
+        <p>Outro exemplo seria extrair o efeito como:</p>
+        <pre>
+          {`
+          export function useChatRoom({ serverUrl, roomId }) {
+            useEffect(() => {
+              const options = {
+                serverUrl: serverUrl,
+                roomId: roomId
+              };
+              const connection = createConnection(options);
+              connection.connect();
+              connection.on('message', (msg) => {
+                showNotification('New message: ' + msg);
+              });
+              return () => connection.disconnect();
+            }, [roomId, serverUrl]);
+          }
+
+          //------------------
+
+          export default function ChatRoom({ roomId }) {
+            const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+          
+            useChatRoom({
+              roomId: roomId,
+              serverUrl: serverUrl
+            });
+          
+            return (
+              <>
+                <label>
+                  Server URL:
+                  <input value={serverUrl} onChange={e => setServerUrl(e.target.value)} />
+                </label>
+                <h1>Welcome to the {roomId} room!</h1>
+              </>
+            );
+          }
+          `}
+        </pre>
       </div>
     </div>
   );
